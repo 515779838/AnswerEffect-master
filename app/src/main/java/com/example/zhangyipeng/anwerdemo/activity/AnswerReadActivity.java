@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.example.zhangyipeng.anwerdemo.R;
 import com.example.zhangyipeng.anwerdemo.adapter.LayoutAdapter;
@@ -47,8 +48,7 @@ public class AnswerReadActivity extends BaseActivity {
                 new SelectCourseListActivity().selectPos(AnswerReadActivity.this, "" + getString(R.string.app_name), datas.size(), new SelectCourseListActivity.SelectDictionaryCallBack() {
                     @Override
                     public void getData(int pos) {
-                         mRecyclerView.scrollToPosition(pos);
-
+                        mRecyclerView.scrollToPosition(pos);
                     }
                 });
             }
@@ -78,7 +78,6 @@ public class AnswerReadActivity extends BaseActivity {
             progressDialog.dismiss();
         }
     }
-
 
     class MyTask extends AsyncTask<String, Void, String> {
 
@@ -110,30 +109,43 @@ public class AnswerReadActivity extends BaseActivity {
                     @Override
                     public void onSelectClick(int position) {
                         mRecyclerView.smoothScrollToPosition(position);
-                        Log.e("zj","position = "+position);
+                        Log.e("zj", "position = " + position);
                     }
                 });
             }
         }
     }
 
-
+    LinearLayoutManager layout;
 
     protected void initViewPager() {
         mRecyclerView = (RecyclerViewPager) findViewById(R.id.viewpager);
-        LinearLayoutManager layout  = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        layout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(layout);
         mRecyclerView.setSinglePageFling(true);
         mRecyclerView.setFlingFactor(0.1f);
         mRecyclerView.setTriggerOffset(0.1f);
         layoutAdapter = new LayoutAdapter(this, mRecyclerView);
         mRecyclerView.setAdapter(layoutAdapter);
-        mRecyclerView.setHasFixedSize(true);
+//        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLongClickable(true);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int scrollState) {
-//                updateState(scrollState);
+                int pos = layout.findLastVisibleItemPosition();
+//                int pos = layout.findLastCompletelyVisibleItemPosition();
+                if (pos != -1) {
+                    Log.e("zj", "scrollState = " + scrollState);
+                    Log.e("zj", "pos = " + pos);
+                    View view = layout.findViewByPosition(pos);
+
+                    Log.e("zj", "view = " + (view == null));
+                    if (view != null) {
+                        ScrollView scrollView = (ScrollView) view.findViewById(R.id.scrollView);
+                        scrollView.smoothScrollTo(0, 0);
+                        scrollView.setFocusable(true);
+                    }
+                }
 
             }
 
@@ -147,18 +159,10 @@ public class AnswerReadActivity extends BaseActivity {
             @Override
             public void OnPageChanged(int oldPosition, int newPosition) {
 //                mRecyclerView.scrollToPosition(newPosition);
-
                 Log.d("test", "oldPosition:" + oldPosition + " newPosition:" + newPosition);
-//                recyclerView.scrollToPosition(newPosition);
-//
-//                topicAdapter.notifyCurPosition(newPosition);
-//                topicAdapter.notifyPrePosition(oldPosition);
-//
-//                Log.i("DDD",newPosition+"");
 
             }
         });
-
 
 
         mRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
