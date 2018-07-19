@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -46,7 +47,7 @@ public class AnswerReadActivity extends BaseActivity {
                 new SelectCourseListActivity().selectPos(AnswerReadActivity.this, "" + getString(R.string.app_name), datas.size(), new SelectCourseListActivity.SelectDictionaryCallBack() {
                     @Override
                     public void getData(int pos) {
-                        mRecyclerView.scrollToPosition(pos);
+                         mRecyclerView.scrollToPosition(pos);
 
                     }
                 });
@@ -103,11 +104,13 @@ public class AnswerReadActivity extends BaseActivity {
             super.onPostExecute(s);
             dismissDialog();
             if (layoutAdapter != null) {
+
                 layoutAdapter.setDataList(datas);
                 layoutAdapter.setOnSelectClickLisener(new LayoutAdapter.onSelectClick() {
                     @Override
                     public void onSelectClick(int position) {
                         mRecyclerView.smoothScrollToPosition(position);
+                        Log.e("zj","position = "+position);
                     }
                 });
             }
@@ -115,10 +118,10 @@ public class AnswerReadActivity extends BaseActivity {
     }
 
 
+
     protected void initViewPager() {
         mRecyclerView = (RecyclerViewPager) findViewById(R.id.viewpager);
-        LinearLayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,
-                false);
+        LinearLayoutManager layout  = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(layout);
         mRecyclerView.setSinglePageFling(true);
         mRecyclerView.setFlingFactor(0.1f);
@@ -131,13 +134,32 @@ public class AnswerReadActivity extends BaseActivity {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int scrollState) {
 //                updateState(scrollState);
+
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
-//
+
             }
         });
+
+        mRecyclerView.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
+            @Override
+            public void OnPageChanged(int oldPosition, int newPosition) {
+//                mRecyclerView.scrollToPosition(newPosition);
+
+                Log.d("test", "oldPosition:" + oldPosition + " newPosition:" + newPosition);
+//                recyclerView.scrollToPosition(newPosition);
+//
+//                topicAdapter.notifyCurPosition(newPosition);
+//                topicAdapter.notifyPrePosition(oldPosition);
+//
+//                Log.i("DDD",newPosition+"");
+
+            }
+        });
+
+
 
         mRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override

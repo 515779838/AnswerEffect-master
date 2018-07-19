@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="bottom"
-   >
+    android:gravity="bottom">
 
     <!-- MAIN CONTENT -->
     <LinearLayout
@@ -21,7 +20,6 @@
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/bt_load_anwer"
             android:clipToPadding="false"
             app:rvp_singlePageFling="false" />
     </LinearLayout>
